@@ -97,4 +97,25 @@ public class Main {
         List<String> zset = j.zrange("zset", 0 ,-1);
         s(zset);
     }
+    // 模拟手机登录
+    @Test
+    public void testPhoneVerify(){
+        String phone = "00000000000";
+        // 获取验证码
+        String code = PhoneVerify.setRandomCode(phone);
+        if(code.equals("NULL")){
+            s("超过请求次数");
+            code = j.get(phone+PhoneVerify.ver);
+            s(code);
+            if(code!= null){
+                s(PhoneVerify.verifyTelephone(phone,code));
+            }
+            else{
+                s("验证码过期，且请求次数用完，今天不可登录");
+            }
+            return;
+        }
+        s(code);
+        s(PhoneVerify.verifyTelephone(phone,code));
+    }
 }
